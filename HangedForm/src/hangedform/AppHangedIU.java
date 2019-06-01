@@ -34,10 +34,13 @@ public class AppHangedIU extends javax.swing.JFrame {
     public String msgsP[];    
     public String msgsA[];
     public String msgsC[];
-    public int ran;
-    public int err;
-    public int err2;
-    public String res[];
+    public String msgs[];
+    public int ran=0;
+    public int err=0;
+    public int err2=0;
+    public String res[]; 
+    public String pal[];
+    
 
     int r = 10;
 
@@ -127,14 +130,14 @@ public class AppHangedIU extends javax.swing.JFrame {
         for (int i = 1; i < 28; i++) {
             btns[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                              String[] msg = new String[10];
+                              
                         
-                    checarLetra(e,msg);
+                    checarLetra(e,msgs);
                 }
             });
         }
-                   String[] msg = new String[10];
-                        iniciar(msg);
+                
+                        iniciar(msgs);
     
     }
  private void initCanvas() {
@@ -143,7 +146,7 @@ public class AppHangedIU extends javax.swing.JFrame {
         GLCapabilities glcaps = new GLCapabilities(profile);
         glCanvas = new GLCanvas(glcaps);
         // Incrustar el Rendere en la ventana de visualizaciòn
-        glCanvas.addGLEventListener((GLEventListener) rendererPunto);
+        glCanvas.addGLEventListener(rendererPunto);
         // Colocar en el Panel de Swing el canvas o ventana de visualizacion de OPenGL
         this.panelJOGL.add(glCanvas);
         int w = this.panelJOGL.getWidth();
@@ -164,11 +167,12 @@ public class AppHangedIU extends javax.swing.JFrame {
             btns[i].setEnabled(true);
         }
         //para generar una palabra aleatoriamente xD
-        ran = (int) 0 + (int) (Math.random() * ((msgs.length - 1) + 1));
+        ran =(int)(Math.random() * ((msgs.length - 1) + 1));
         //SEPARA EL MENSAJE POR PALABRAS
-String pal[]=new String[msgs.length];
-        if(pal!=null){
-        pal= msgs[ran].split(" ");
+        System.out.println(ran);
+    if(pal!=null){
+      pal = msgs[ran].split(" ");
+ 
         res = new String[msgs[ran].length() + 1];
         int j = 0;
         // seran los guiones que van debajo de las letras como una separacion_
@@ -180,23 +184,28 @@ String pal[]=new String[msgs.length];
             txtPalabra.setText(txtPalabra.getText() + "\n");
             res[j++] = " ";
         }}
+   
     }
 
    public void OpcionElejida(ActionEvent e){
        
        String itemSelecionado = (String)jComboBoxCategoria.getSelectedItem(); 
         switch(itemSelecionado){
-            case "Animales":
-                iniciar(msgsA);
+            case "Animales":         
                 checarLetra(e, msgsA);
+                
+                iniciar(msgsA);
+       
                 break;
                      case "Paices":
-                            iniciar(msgsP);
-                checarLetra(e, msgsP);
+                             checarLetra(e, msgsP); 
+                         iniciar(msgsP);
+            
                 break;
                      case "Cosas":
-                            iniciar(msgsC);
-                checarLetra(e, msgsC);
+                         checarLetra(e, msgsC);   
+                         iniciar(msgsC);
+                
                 break;
         }
 
@@ -262,8 +271,8 @@ String pal[]=new String[msgs.length];
                     
                     if (gano) { 
                         JOptionPane.showMessageDialog(this, "FELICITACIONES GANASTES!!\n YA PUEDES RECLAMAR TU PREMIO", "Ahorcado",JOptionPane.INFORMATION_MESSAGE);
-              String[] msg = new String[10];
-                        iniciar(msg);
+
+                        iniciar(msgs);
                         return;
                     }
                     //SI LA LETRA NO ESTA EN EL MENSAGE, SE INCREMENTA EL ERROR Y SE CAMBIA LA IMAGEN
@@ -276,8 +285,8 @@ String pal[]=new String[msgs.length];
                     
                     if (err == 5) {
                         JOptionPane.showMessageDialog(this, "HAS PERDIDO\n Intenta con otra palabra la respuesta es: \n" + msgs[ran], "Ahorcado",JOptionPane.INFORMATION_MESSAGE);
-               String[] msg = new String[10];
-                        iniciar(msg);
+             
+                        iniciar(msgs);
                         return;
                     }
                 }
@@ -321,8 +330,8 @@ String pal[]=new String[msgs.length];
                     
                     if (gano) { 
                         JOptionPane.showMessageDialog(this, "FELICITACIONES GANASTES!!\n YA PUEDES RECLAMAR TU PREMIO", "Ahorcado",JOptionPane.INFORMATION_MESSAGE);
-                                  String[] msg = new String[10];
-                        iniciar(msg);
+                                 
+                        iniciar(msgs);
                         return;
                     }
                     //SI LA LETRA NO ESTA EN EL MENSAGE, SE INCREMENTA EL ERROR Y SE CAMBIA LA IMAGEN
@@ -332,8 +341,8 @@ String pal[]=new String[msgs.length];
                     //SI SE LLEGA A LOS 5 ERRORES ENTONCES SE PIERDE EL JUEGO Y SE MANDA EL MENSAGE DE:
                     if (err == 5) {
                         JOptionPane.showMessageDialog(this, "HAS PERDIDO\n Intenta con otra palabra la respuesta es: \n" + msgs[ran], "Ahorcado",JOptionPane.INFORMATION_MESSAGE);
-                String[] msg = new String[10];
-                        iniciar(msg);
+         
+                        iniciar(msgs);
                         return;
                     }
                 }
@@ -927,9 +936,9 @@ String pal[]=new String[msgs.length];
     }//GEN-LAST:event_btnGenerarPalabraActionPerformed
 
     private void jComboBoxCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCategoriaActionPerformed
-        jComboBoxCategoria.addItem("Animales");
-        jComboBoxCategoria.addItem("Paices");
-        jComboBoxCategoria.addItem("Cosas");
+//        jComboBoxCategoria.addItem("Animales");
+//        jComboBoxCategoria.addItem("Paices");
+//        jComboBoxCategoria.addItem("Cosas");
         
         
 
