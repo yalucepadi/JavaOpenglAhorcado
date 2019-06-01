@@ -97,7 +97,7 @@ public class RendererPunto implements GLEventListener {
         gl.glPushMatrix();
         gl.glTranslated(tx, ty, tz);
         // Dibujar un objeto 3D
-        glut.glutSolidCube(8);
+        glut.glutWireSphere(10,20,20);
         gl.glPopMatrix();
     }
 

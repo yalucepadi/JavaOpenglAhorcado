@@ -14,6 +14,8 @@ import com.jogamp.opengl.awt.GLCanvas;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Random;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -127,7 +129,8 @@ public class AppHangedIU extends javax.swing.JFrame {
         msgsC[9] = "Sabanas".toUpperCase();
             
         initCanvas();
-        for (int i = 1; i < 28; i++) {
+        try {
+            for (int i = 1; i < 28; i++) {
             btns[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                               
@@ -138,6 +141,11 @@ public class AppHangedIU extends javax.swing.JFrame {
         }
                 
                         iniciar(msgs);
+                        throw new IOException();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
     
     }
  private void initCanvas() {
@@ -146,7 +154,7 @@ public class AppHangedIU extends javax.swing.JFrame {
         GLCapabilities glcaps = new GLCapabilities(profile);
         glCanvas = new GLCanvas(glcaps);
         // Incrustar el Rendere en la ventana de visualizaciòn
-        glCanvas.addGLEventListener(rendererPunto);
+        glCanvas.addGLEventListener((GLEventListener) rendererPunto);
         // Colocar en el Panel de Swing el canvas o ventana de visualizacion de OPenGL
         this.panelJOGL.add(glCanvas);
         int w = this.panelJOGL.getWidth();
@@ -156,7 +164,8 @@ public class AppHangedIU extends javax.swing.JFrame {
 
     //funcion para comenzar los parametros del juego o iniciar una nueva partida
     public void iniciar(String msgs[]) {
-        //ERRORES EN 0
+        try{//ERRORES EN 0
+        String pal[] = null;
         err = 0;
         err2 = 6;
         //Dibujo.setIcon(imgs[0]);
@@ -167,10 +176,10 @@ public class AppHangedIU extends javax.swing.JFrame {
             btns[i].setEnabled(true);
         }
         //para generar una palabra aleatoriamente xD
-        ran =(int)(Math.random() * ((msgs.length - 1) + 1));
+        ran =(int) Math.floor(0+(Math.random() * ((msgs.length - 1) + 1)));
         //SEPARA EL MENSAJE POR PALABRAS
         System.out.println(ran);
-    if(pal!=null){
+
       pal = msgs[ran].split(" ");
  
         res = new String[msgs[ran].length() + 1];
@@ -183,8 +192,11 @@ public class AppHangedIU extends javax.swing.JFrame {
             }
             txtPalabra.setText(txtPalabra.getText() + "\n");
             res[j++] = " ";
-        }}
-   
+        }
+                throw new IOException();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
    public void OpcionElejida(ActionEvent e){
@@ -932,7 +944,15 @@ public class AppHangedIU extends javax.swing.JFrame {
     }//GEN-LAST:event_button_27ActionPerformed
 
     private void btnGenerarPalabraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPalabraActionPerformed
-        // TODO add your handling code here:
+        if (JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de querer una palabra nueva?",
+                "Ahorcado", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION)
+        {       
+                   OpcionElejida(evt);
+            
+        }
+        else{
+                setDefaultCloseOperation(0);
+        }
     }//GEN-LAST:event_btnGenerarPalabraActionPerformed
 
     private void jComboBoxCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCategoriaActionPerformed
