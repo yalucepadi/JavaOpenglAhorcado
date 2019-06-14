@@ -5,12 +5,16 @@
  */
 package hangedform;
 
-
+import com.jogamp.opengl.GL2;
 import renderer.RendererMuñeco;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
+import com.jogamp.opengl.util.Animator;
+import com.jogamp.opengl.util.gl2.GLUT;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,21 +34,23 @@ import renderer.RendererMuñeco;
  */
 public class AppHangedIU extends javax.swing.JFrame {
 
-    private GLCanvas glCanvas;
-    private RendererMuñeco rendererPunto;
+    public static GLCanvas glCanvas;
+    public static Animator animador;
+    public RendererMuñeco rendererPunto;
+    private GL2 gl;
+    GLU glu = new GLU();
+    GLUT glut = new GLUT();
     public JButton btns[];
-    public String msgsP[];    
+    public String msgsP[];
     public String msgsA[];
     public String msgsC[];
     public String msgs[];
-    public int ran=0;
-    public int err=0;
-    public int err2=0;
-    public String res[]; 
+    public int ran = 0;
+    public int err = 0;
+    public int err2 = 0;
+    public String res[];
     public String pal[];
-    
 
-    
     /**
      *
      * Creates new form AppHangedi
@@ -53,11 +59,7 @@ public class AppHangedIU extends javax.swing.JFrame {
 
         initComponents();
         rendererPunto = new RendererMuñeco();
-        /* JButton button_1 = new JButton("A");
-    button_1.setBounds(getX(),getY(),30, 25);
-    button_1.setBorder(new Botones.RounderBorder(10));
-    button_1.setForeground(Color.BLUE);
-         */
+        initCanvas();
         //botones para las letras
         btns = new JButton[28];
         btns[1] = button_1;
@@ -99,8 +101,7 @@ public class AppHangedIU extends javax.swing.JFrame {
         msgsP[7] = "Australia".toUpperCase();
         msgsP[8] = "Nueva Zelanda".toUpperCase();
         msgsP[9] = "Mongolia".toUpperCase();
-       
-      
+
 //palabras categoria Animales
         msgsA = new String[10];
         msgsA[0] = "Perro".toUpperCase();
@@ -113,7 +114,7 @@ public class AppHangedIU extends javax.swing.JFrame {
         msgsA[7] = "Dragon de comodo".toUpperCase();
         msgsA[8] = "Tosanoides obama".toUpperCase();
         msgsA[9] = "Guacamayo".toUpperCase();
-      
+
 //palabras categoria Cosas
         msgsC = new String[10];
         msgsC[0] = "Mesa".toUpperCase();
@@ -126,23 +127,21 @@ public class AppHangedIU extends javax.swing.JFrame {
         msgsC[7] = "Mota".toUpperCase();
         msgsC[8] = "Revista".toUpperCase();
         msgsC[9] = "Sabanas".toUpperCase();
-            
-        initCanvas();
 
-    
     }
- private void initCanvas() {
-        // Creacion de Canvas
+
+    private void initCanvas() {
         GLProfile profile = GLProfile.getDefault();
         GLCapabilities glcaps = new GLCapabilities(profile);
         glCanvas = new GLCanvas(glcaps);
-        // Incrustar el Rendere en la ventana de visualizaciòn
         glCanvas.addGLEventListener(rendererPunto);
-        // Colocar en el Panel de Swing el canvas o ventana de visualizacion de OPenGL
+        glCanvas.addKeyListener(rendererPunto);
         this.panelJOGL.add(glCanvas);
         int w = this.panelJOGL.getWidth();
-        int h = this.panelJOGL.getHeight();
+        int h = this.panelJOGL.getWidth();
         glCanvas.setSize(w, h);
+        animador = new Animator(glCanvas);
+        System.out.println("\nAncho:" + w + "Altura:" + h);
     }
 
     //funcion para comenzar los parametros del juego o iniciar una nueva partida
@@ -159,12 +158,12 @@ public class AppHangedIU extends javax.swing.JFrame {
             btns[i].setEnabled(true);
         }
         //para generar una palabra aleatoriamente xD
-        ran =(int) Math.floor((int)0+(int)(Math.random() * ((msgs.length - 1) + 1)));
+        ran = (int) Math.floor(0 + (int) (Math.random() * ((msgs.length - 1) + 1)));
         //SEPARA EL MENSAJE POR PALABRAS
         System.out.println(ran);
 
-      pal = msgs[ran].split(" ");
- 
+        pal = msgs[ran].split(" ");
+
         res = new String[msgs[ran].length() + 1];
         int j = 0;
         // seran los guiones que van debajo de las letras como una separacion_
@@ -176,76 +175,62 @@ public class AppHangedIU extends javax.swing.JFrame {
             txtPalabra.setText(txtPalabra.getText() + "\n");
             res[j++] = " ";
         }
-               
-       
+
     }
 
-   public void OpcionElejida(ActionEvent e){
-       
-       String itemSelecionado = (String)jComboBoxCategoria.getSelectedItem(); 
-        switch(itemSelecionado){
-            case "Animales":   
-                     for (int i = 1; i < 28; i++) {
-            btns[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                              
-                                 checarLetra(e, msgsA);
-             
-                    
+    public void OpcionElejida(ActionEvent e) {
+
+        String itemSelecionado = (String) jComboBoxCategoria.getSelectedItem();
+        System.out.println(itemSelecionado);
+        switch (itemSelecionado) {
+            case "Animales":
+                for (int i = 1; i < 28; i++) {
+                    btns[i].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+                            checarLetra(e, msgsA);
+
+                        }
+                    });
                 }
-            });
-        }
-                
-                
-            
-                
+
                 iniciar(msgsA);
-       
+
                 break;
-                     case "Paices":
-                                   for (int i = 1; i < 28; i++) {
-            btns[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                              
-                                 checarLetra(e, msgsP);
-             
-                    
+            case "Paices":
+                for (int i = 1; i < 28; i++) {
+                    btns[i].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+                            checarLetra(e, msgsP);
+
+                        }
+                    });
                 }
-            });
-        }
-                
-                
-            
-                
+
                 iniciar(msgsP);
-            
+
                 break;
-                     case "Cosas":
-                                for (int i = 1; i < 28; i++) {
-            btns[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                              
-                                 checarLetra(e, msgsC);
-             
-                    
+            case "Cosas":
+                for (int i = 1; i < 28; i++) {
+                    btns[i].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+                            checarLetra(e, msgsC);
+
+                        }
+                    });
                 }
-            });
-        }
-                
-                
-            
-                
+
                 iniciar(msgsC);
-                
+
                 break;
         }
 
-   
-   
-   }
+    }
 //    private void dibujarPunto(int x, int y, int z) {
 //        // Recuperar los valores del Punto
 //
@@ -262,77 +247,18 @@ public class AppHangedIU extends javax.swing.JFrame {
 //            glCanvas.repaint();
 //        } while (x < 10);
 //    }
- public void checarLetra(ActionEvent e,String msgs[]) {
+
+    public void checarLetra(ActionEvent e, String msgs[]) {
         /*Icon cp=new ImageIcon(getClass().getResource("/imagenes/copa.png"));//icono de la copa
         Icon cara=new ImageIcon(getClass().getResource("/imagenes/cara.png"));//icono de la copa*/
         JButton bt = (JButton) e.getSource();
         char c[];
         //busca la letra en la palabra despues de haber sido presionada
-       
-        
+
         for (int i = 1; i < 28; i++) {
             if (bt == btns[i]) {
                 //la tecla es inicializada
                 c = Character.toChars(64 + i);
-                     System.out.println(c);
-                //busca si la letra esta en la frase
-                boolean esta = false;
-                for (int j = 0; j < msgs[ran].length(); j++) {
-                    if (c[0] == msgs[ran].charAt(j)) {
-                        res[j] = c[0] + "";
-                        esta = true;
-                    }
-                }
-                //SI LA LETRA ESTA EN EL MENSAJE SE MUESTRA EN EL TEXTPANEL
-                if (esta) {
-                    txtPalabra.setText("");
-                    for (String re : res) {
-                        if (" ".equals(re)){
-                            txtPalabra.setText(txtPalabra.getText() + "\n");
-                        } else {
-                            txtPalabra.setText(txtPalabra.getText() + re + " ");
-                        }
-                    }
-                    //hace una comprobacion de las letras restantes y faltantes, en caso de que ya no haya letras sera ganador :D
-                    boolean gano = true;
-                    for (String re : res){
-                        if (re.equals("_")) {
-                            gano = false;
-                            break;
-                        }
-                    }
-                    //al ser correcta se muestra un mensaje y se reinicia el juego
-                    
-                    if (gano) { 
-                        JOptionPane.showMessageDialog(this, "FELICITACIONES GANASTES!!\n YA PUEDES RECLAMAR TU PREMIO", "Ahorcado",JOptionPane.INFORMATION_MESSAGE);
-
-                        iniciar(msgs);
-                        return;
-                    }
-                    //SI LA LETRA NO ESTA EN EL MENSAGE, SE INCREMENTA EL ERROR Y SE CAMBIA LA IMAGEN
-                } else {
-                    /*Dibujo.setIcon(imgs[++err]);
-                    errores.setIcon(imgs[++err2]);//////////////////////////////////////_----*/
-                    //SI SE LLEGA A LOS 5 ERRORES ENTONCES SE PIERDE EL JUEGO Y SE MANDA EL MENSAGE DE:
-                    err++;
-                    System.out.println(err);
-                    
-                    if (err == 5) {
-                        JOptionPane.showMessageDialog(this, "HAS PERDIDO\n Intenta con otra palabra la respuesta es: \n" + msgs[ran], "Ahorcado",JOptionPane.INFORMATION_MESSAGE);
-             
-                        iniciar(msgs);
-                        return;
-                    }
-                }
-                //esta es la linea que desactiva las letras despues de ser usadas :3
-                bt.setEnabled(false);
-                break;
-            }
-        
-        if(bt==btns[27]){
-            //la tecla es inicializada
-                char letraeñe[]={'\u00d1'} ;
-                c =letraeñe;
                 System.out.println(c);
                 //busca si la letra esta en la frase
                 boolean esta = false;
@@ -346,7 +272,7 @@ public class AppHangedIU extends javax.swing.JFrame {
                 if (esta) {
                     txtPalabra.setText("");
                     for (String re : res) {
-                        if (" ".equals(re)){
+                        if (" ".equals(re)) {
                             txtPalabra.setText(txtPalabra.getText() + "\n");
                         } else {
                             txtPalabra.setText(txtPalabra.getText() + re + " ");
@@ -354,17 +280,80 @@ public class AppHangedIU extends javax.swing.JFrame {
                     }
                     //hace una comprobacion de las letras restantes y faltantes, en caso de que ya no haya letras sera ganador :D
                     boolean gano = true;
-                    for (String re : res){
+                    for (String re : res) {
                         if (re.equals("_")) {
                             gano = false;
                             break;
                         }
                     }
                     //al ser correcta se muestra un mensaje y se reinicia el juego
+
+                    if (gano) {
+                        JOptionPane.showMessageDialog(this, "FELICITACIONES GANASTES!!\n YA PUEDES RECLAMAR TU PREMIO", "Ahorcado", JOptionPane.INFORMATION_MESSAGE);
+
+                        iniciar(msgs);
+                        return;
+                    }
+                    //SI LA LETRA NO ESTA EN EL MENSAGE, SE INCREMENTA EL ERROR Y SE CAMBIA LA IMAGEN
+                } else {
+
+                    /*Dibujo.setIcon(imgs[++err]);
+                    errores.setIcon(imgs[++err2]);//////////////////////////////////////_----*/
+                    //SI SE LLEGA A LOS 5 ERRORES ENTONCES SE PIERDE EL JUEGO Y SE MANDA EL MENSAGE DE:
                     
-                    if (gano) { 
-                        JOptionPane.showMessageDialog(this, "FELICITACIONES GANASTES!!\n YA PUEDES RECLAMAR TU PREMIO", "Ahorcado",JOptionPane.INFORMATION_MESSAGE);
-                                 
+                    err++;
+                    //rendererPunto.controlarErrores(err);
+
+                    System.out.println("Error nº:" + err);
+
+                    if (err == 5) {
+                        JOptionPane.showMessageDialog(this, "HAS PERDIDO\n Intenta con otra palabra la respuesta es: \n" + msgs[ran], "Ahorcado", JOptionPane.INFORMATION_MESSAGE);
+
+                        iniciar(msgs);
+                        return;
+                    }
+                }
+                //esta es la linea que desactiva las letras despues de ser usadas :3
+                bt.setEnabled(false);
+                break;
+            }
+
+            if (bt == btns[27]) {
+                //la tecla es inicializada
+                char letraeñe[] = {'\u00d1'};
+                c = letraeñe;
+                System.out.println(c);
+                //busca si la letra esta en la frase
+                boolean esta = false;
+                for (int j = 0; j < msgs[ran].length(); j++) {
+                    if (c[0] == msgs[ran].charAt(j)) {
+                        res[j] = c[0] + "";
+                        esta = true;
+                    }
+                }
+                //SI LA LETRA ESTA EN EL MENSAJE SE MUESTRA EN EL TEXTPANEL
+                if (esta) {
+                    txtPalabra.setText("");
+                    for (String re : res) {
+                        if (" ".equals(re)) {
+                            txtPalabra.setText(txtPalabra.getText() + "\n");
+                        } else {
+                            txtPalabra.setText(txtPalabra.getText() + re + " ");
+                        }
+                    }
+                    //hace una comprobacion de las letras restantes y faltantes, en caso de que ya no haya letras sera ganador :D
+                    boolean gano = true;
+                    for (String re : res) {
+                        if (re.equals("_")) {
+                            gano = false;
+                            break;
+                        }
+                    }
+                    //al ser correcta se muestra un mensaje y se reinicia el juego
+
+                    if (gano) {
+                        JOptionPane.showMessageDialog(this, "FELICITACIONES GANASTES!!\n YA PUEDES RECLAMAR TU PREMIO", "Ahorcado", JOptionPane.INFORMATION_MESSAGE);
+
                         iniciar(msgs);
                         return;
                     }
@@ -373,9 +362,15 @@ public class AppHangedIU extends javax.swing.JFrame {
                     /*Dibujo.setIcon(imgs[++err]);
                     errores.setIcon(imgs[++err2]);//////////////////////////////////////_----*/
                     //SI SE LLEGA A LOS 5 ERRORES ENTONCES SE PIERDE EL JUEGO Y SE MANDA EL MENSAGE DE:
+
+                    err++;
+                    //rendererPunto.controlarErrores(err);
+
+                    System.out.println("Error nº:" + err);
+
                     if (err == 5) {
-                        JOptionPane.showMessageDialog(this, "HAS PERDIDO\n Intenta con otra palabra la respuesta es: \n" + msgs[ran], "Ahorcado",JOptionPane.INFORMATION_MESSAGE);
-         
+                        JOptionPane.showMessageDialog(this, "HAS PERDIDO\n Intenta con otra palabra la respuesta es: \n" + msgs[ran], "Ahorcado", JOptionPane.INFORMATION_MESSAGE);
+
                         iniciar(msgs);
                         return;
                     }
@@ -383,10 +378,11 @@ public class AppHangedIU extends javax.swing.JFrame {
                 //esta es la linea que desactiva las letras despues de ser usadas :3
                 bt.setEnabled(false);
                 break;
-        
-        }
+
+            }
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -429,20 +425,34 @@ public class AppHangedIU extends javax.swing.JFrame {
         button_27 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtPalabra = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         panelJOGL.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelJOGL.setPreferredSize(new java.awt.Dimension(1000, 1000));
+        panelJOGL.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                panelJOGLMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                panelJOGLMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                panelJOGLMouseExited(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelJOGLLayout = new javax.swing.GroupLayout(panelJOGL);
         panelJOGL.setLayout(panelJOGLLayout);
         panelJOGLLayout.setHorizontalGroup(
             panelJOGLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGap(0, 998, Short.MAX_VALUE)
         );
         panelJOGLLayout.setVerticalGroup(
             panelJOGLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 192, Short.MAX_VALUE)
+            .addGap(0, 998, Short.MAX_VALUE)
         );
 
         btnIniciar.setText("Iniciar");
@@ -648,15 +658,15 @@ public class AppHangedIU extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(button_25)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(49, 49, 49)
                         .addComponent(button_26)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(button_27))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(4, 4, 4)
                             .addComponent(button_19)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(button_20)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(button_21)
@@ -676,7 +686,7 @@ public class AppHangedIU extends javax.swing.JFrame {
                                     .addComponent(button_3)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(button_4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(button_5))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -685,7 +695,9 @@ public class AppHangedIU extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(button_8))
                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addComponent(button_13)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(button_13)
+                                                .addComponent(button_25))
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(button_14)))
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -705,10 +717,13 @@ public class AppHangedIU extends javax.swing.JFrame {
                                         .addComponent(button_11))))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(button_6)
-                                .addComponent(button_12)
-                                .addComponent(button_18)))))
-                .addContainerGap(69, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(button_6)
+                                    .addComponent(button_12))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(button_18)
+                                    .addGap(0, 0, Short.MAX_VALUE))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -772,6 +787,20 @@ public class AppHangedIU extends javax.swing.JFrame {
                 .addGap(32, 32, 32))
         );
 
+        jButton1.setText("Iniciar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Parar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -779,58 +808,66 @@ public class AppHangedIU extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(57, 57, 57)
+                                .addGap(35, 35, 35)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(129, 129, 129)
                                 .addComponent(btnIniciar)))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
-                        .addComponent(panelJOGL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelJOGL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panelJOGL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
                         .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnIniciar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(108, 108, 108))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnIniciar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panelJOGL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
-      
+
         int x1 = 0;
         int y1 = 0;
         int z1 = 0;
 
         //dibujarPunto(x1, y1, z1);
         System.out.println("\nx1:" + x1);
-         if (JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de querer una palabra nueva?",
-                "Ahorcado", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION)
-        {       
-                   OpcionElejida(evt);
-            
-        }
-        else{
-                setDefaultCloseOperation(0);
+        if (JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de querer una palabra nueva?",
+                "Ahorcado", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION) {
+            OpcionElejida(evt);
+
+        } else {
+            setDefaultCloseOperation(0);
         }
 
     }//GEN-LAST:event_btnIniciarActionPerformed
@@ -939,10 +976,29 @@ public class AppHangedIU extends javax.swing.JFrame {
 //        jComboBoxCategoria.addItem("Animales");
 //        jComboBoxCategoria.addItem("Paices");
 //        jComboBoxCategoria.addItem("Cosas");
-        
-        
+
 
     }//GEN-LAST:event_jComboBoxCategoriaActionPerformed
+
+    private void panelJOGLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseClicked
+
+    }//GEN-LAST:event_panelJOGLMouseClicked
+
+    private void panelJOGLMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseEntered
+
+    }//GEN-LAST:event_panelJOGLMouseEntered
+
+    private void panelJOGLMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseExited
+
+    }//GEN-LAST:event_panelJOGLMouseExited
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        animador.start();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        animador.stop();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -978,6 +1034,7 @@ public class AppHangedIU extends javax.swing.JFrame {
                 new AppHangedIU().setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1009,6 +1066,8 @@ public class AppHangedIU extends javax.swing.JFrame {
     private javax.swing.JButton button_7;
     private javax.swing.JButton button_8;
     private javax.swing.JButton button_9;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBoxCategoria;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
