@@ -9,7 +9,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 
 import com.jogamp.opengl.util.gl2.GLUT;
-import hangedform.AppHangedIU;
+import hangedform.AppHangedIU1;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,7 +21,7 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
     static int stacks = 16;
     float ss = 0;
     float aa = 0;
-    int er;
+     public int er=0;
     // Atributos
     // Punto a ser representado
     //private Punto punto;
@@ -49,7 +49,7 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
         ty = 0;
         tz = 0;
         an = 0;
-        er = 0;
+        er =0;
     }
 
 //    public Punto getPunto() {
@@ -301,10 +301,10 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
 
     public void controlarErrores(int er) {
         switch (er) {
-            case 1:
-                extremidadesI();
+            case 5:
+            
                 break;
-            case 2:
+            case 4:
                 extremidadesI();
                 extremidadesS();
                 break;
@@ -314,18 +314,20 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
                 tronco();
 
                 break;
-            case 4:
+            case 2:
                 extremidadesI();
                 extremidadesS();
                 tronco();
                 cabesa();
                 break;
-            case 5:
+            case 1:
                 extremidadesI();
                 extremidadesS();
                 tronco();
                 cabesa();
                 sombrero();
+                break;
+            case 0:
                 break;
         }
     }
@@ -365,7 +367,7 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
         gl.glTranslated(aa, 0, ss);
         controlarErrores(er);
        
-        
+        System.out.println("Clase muñeco er :"+er);
 //cloth
         //tronco();
 //3black
@@ -439,7 +441,7 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
             default:
                 break;
         }
-        AppHangedIU.glCanvas.repaint();
+        AppHangedIU1.glCanvas.repaint();
     }
 
     @Override
