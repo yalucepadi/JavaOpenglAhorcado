@@ -21,7 +21,7 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
     static int stacks = 16;
     float ss = 0;
     float aa = 0;
-     public int er=0;
+    public int er = 0;
     // Atributos
     // Punto a ser representado
     //private Punto punto;
@@ -37,29 +37,19 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
     float ty;
     float tz;
     float an;
-    //muñeco
-    //  GLUquadric
+ 
 
     public RendererMuñeco() {
 
         glu = new GLU();
         glut = new GLUT();
-        //  punto = new Punto();
         tx = 0;
         ty = 0;
         tz = 0;
         an = 0;
-        er =0;
+        er = 0;
     }
 
-//    public Punto getPunto() {
-//        return punto;
-//    }
-//
-//    public void setPunto(Punto punto) {
-//        this.punto = punto;
-//    }
-//
     @Override
     public void dispose(GLAutoDrawable glad) {
 
@@ -100,18 +90,21 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
         double aspect = w / h;
         glu.gluPerspective(60.0, aspect, 0.1, 1000.0);
         gl.glMatrixMode(GL2.GL_MODELVIEW);
+        
     }
 
     public void sombrero() {
         gl.glPushMatrix();
-        gl.glTranslated(0, 2.8, 6);
+
+        gl.glTranslated(0, 2.8, -5.8);
         gl.glRotated(90, 1, 0, 0);
         gl.glScaled(1.5, 1.5, 1.5);
         gl.glColor3ub((byte) 45, (byte) 223, (byte) 13);
         glut.glutSolidCylinder(1, 1, slices, stacks);
         gl.glColor3ub((byte) 84, (byte) 153, (byte) 71);
+     
         glut.glutSolidCube(1);
-        gl.glTranslated(0, 1.6, 6);
+   
         gl.glPopMatrix();
 
     }
@@ -302,31 +295,38 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
     public void controlarErrores(int er) {
         switch (er) {
             case 5:
-            
-                break;
-            case 4:
-                extremidadesI();
-                extremidadesS();
-                break;
-            case 3:
-                extremidadesI();
-                extremidadesS();
-                tronco();
-
-                break;
-            case 2:
-                extremidadesI();
-                extremidadesS();
-                tronco();
-                cabesa();
-                break;
-            case 1:
-                extremidadesI();
+                 extremidadesI();
                 extremidadesS();
                 tronco();
                 cabesa();
                 sombrero();
+
                 break;
+            case 4:
+                 extremidadesI();
+                extremidadesS();
+                tronco();
+                cabesa();
+
+                break;
+            case 3:
+                  extremidadesI();
+                extremidadesS();
+                tronco();
+              
+
+                break;
+            case 2:
+                
+                extremidadesI();
+                extremidadesS();
+
+                break;
+            case 1:
+                 extremidadesI();
+
+                break;
+                
             case 0:
                 break;
         }
@@ -340,13 +340,7 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         gl.glRotatef(0.1f, 0, 1, 0);
 
-        //an++;
-//        tx++;
-//        ty++;
-        //tz++; 
-        //System.out.println("Angulo:" + an + "X:" + tx + "Y:" + ty + "Z:" + tz);
-        //gl.glColor3d(1, 0, 0);
-        //sky
+ 
         gl.glPushMatrix();
         gl.glTranslated(2, 1, -10);
         gl.glRotated(180, 0, 1, 0);
@@ -366,56 +360,9 @@ public class RendererMuñeco implements GLEventListener, KeyListener {
         gl.glPushMatrix();
         gl.glTranslated(aa, 0, ss);
         controlarErrores(er);
-       
-        System.out.println("Clase muñeco er :"+er);
-//cloth
-        //tronco();
-//3black
-//        gl.glPushMatrix();
-//
-//        gl.glTranslated(0, -.5, -4);
-//        gl.glRotated(90, 1, 0, 0);
-//        gl.glScaled(.1, .1, .1);
-//        gl.glColor3f(0, 0, 0);
-//        glut.glutSolidSphere(1, slices, stacks);
-//        gl.glPopMatrix();
-//
-//        gl.glPushMatrix();
-//
-//        gl.glTranslated(0, -.8, -4);
-//        gl.glRotated(90, 1, 0, 0);
-//        gl.glScaled(.1, .1, .1);
-//        gl.glColor3f(0, 0, 0);
-//        glut.glutSolidSphere(1, slices, stacks);
-//        gl.glPopMatrix();
-//
-//        gl.glPushMatrix();
-//
-//        gl.glTranslated(0, -1.1, -4);
-//        gl.glRotated(90, 1, 0, 0);
-//        gl.glScaled(.1, .1, .1);
-//        gl.glColor3f(0, 0, 0);
-//        glut.glutSolidSphere(1, slices, stacks);
-//        gl.glPopMatrix();
-        //second
-        //face
-        //Sombrero();
-        //cabesa();
-//left leg
-//right leg
-        //extremidadesI();
-        //hand
-        //extremidadesS();
-        //mouse
-        //white
-//eye
-//right
-//white
-//white
-//        upeye
-        //      left
-        //    right
-        //System.out.println("aa:"+aa+" ss:"+ss);
+
+        System.out.println("Clase muñeco er :" + er);
+
     }
 
     @Override

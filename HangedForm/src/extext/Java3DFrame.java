@@ -23,6 +23,9 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
@@ -595,8 +598,13 @@ Canvas3D exampleCanvas = new Canvas3D(config);
    * Quits the application.
    */
   public void quit() {
-    System.exit(0);
-  }
+   
+          exampleFrame.dispose();
+     
+      }
+    
+      //System.exit(0);
+  
 
   /**
    * Handles menu selections.
