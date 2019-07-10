@@ -21,19 +21,13 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import renderer.RendererMuñeco;
 
-/**
- *
- * @author Administrador
- */
+
 public class AppHangedIU1 extends javax.swing.JFrame {
 
     public static GLCanvas glCanvas;
     public static Animator animador;
     public RendererMuñeco rendererPunto;
     public ExText extext;
-    private GL2 gl;
-    GLU glu = new GLU();
-    GLUT glut = new GLUT();
     public JButton btns[];
     public String msgsP[];
     public String msgsA[];
@@ -41,15 +35,12 @@ public class AppHangedIU1 extends javax.swing.JFrame {
     public String msgs[];
     public int ran = 0;
     public int err = -1;
-    public int err2 = 0;
+    //public int err2 = 0;
     public String res[];
     public String pal[];
     public ImageIcon imgs[];
 
-    /**
-     *
-     * Creates new form AppHangedi
-     */
+ 
     public AppHangedIU1() {
 
         initComponents();
@@ -94,7 +85,7 @@ public class AppHangedIU1 extends javax.swing.JFrame {
         btns[25] = button_26;
         btns[26] = button_27;
         btns[27] = button_15;
-//palabras categoria Paices
+//palabras categoria Paises
         msgsP = new String[10];
         msgsP[0] = "Peru".toUpperCase();
         msgsP[1] = "Chile".toUpperCase();
@@ -143,7 +134,7 @@ public class AppHangedIU1 extends javax.swing.JFrame {
         glCanvas.addKeyListener(rendererPunto);
         this.panelJOGL.add(glCanvas);
         int w = this.panelJOGL.getWidth();
-        int h = this.panelJOGL.getWidth();
+        int h = this.panelJOGL.getHeight();
         glCanvas.setSize(w, h);
         animador = new Animator(glCanvas);
         System.out.println("\nAncho:" + w + "Altura:" + h);
@@ -157,10 +148,7 @@ public class AppHangedIU1 extends javax.swing.JFrame {
         //ERRORES EN 0
         String pal[]=null;
         err = 0;
-        err2 = 6;
-        //Dibujo.setIcon(imgs[0]);
         txtPalabra.setText("");
-        //errores.setIcon(imgs[6]);//:___________________________________----
         //para activar las letras del tablero
         for (int i = 1; i < 28; i++) {
             btns[i].setEnabled(true);
@@ -170,12 +158,11 @@ public class AppHangedIU1 extends javax.swing.JFrame {
         //SEPARA EL MENSAJE POR PALABRAS
         System.out.println(ran);
 
-        pal= msgs[ran].split(" ");
-        //System.out.println(String.valueOf(msgs[ran]));         
+        pal= msgs[ran].split(" ");      
              a(String.valueOf(msgs[ran]));
         res = new String[msgs[ran].length() + 1];
         int j = 0;
-        // seran los guiones que van debajo de las letras como una separacion_
+        // seran los guiones que van debajo de las letras como una separacion
         for (String pal1 : pal) {
             for (int i = 0; i < pal1.length(); i++) {
                 txtPalabra.setText(txtPalabra.getText() + "_ ");
@@ -187,7 +174,7 @@ public class AppHangedIU1 extends javax.swing.JFrame {
 
     }
 
-    public void OpcionElejida(ActionEvent e) {
+    public void OpcionElegida(ActionEvent e) {
 
         String itemSelecionado = (String) jComboBoxCategoria.getSelectedItem();
         System.out.println(itemSelecionado);
@@ -199,16 +186,15 @@ public class AppHangedIU1 extends javax.swing.JFrame {
                         public void actionPerformed(ActionEvent e) {
 
                             checarLetra(e, msgsA);
-                        
-
                         }
                     });
                 }
-
+ rendererPunto.er = 0;
+                          errores.setIcon(imgs[rendererPunto.er]);
                 iniciar(msgsA);
 
                 break;
-            case "Paices":
+            case "Paises":
                 for (int i = 1; i < 28; i++) {
                     btns[i].addActionListener(new ActionListener() {
                         @Override
@@ -219,7 +205,8 @@ public class AppHangedIU1 extends javax.swing.JFrame {
                         }
                     });
                 }
-
+ rendererPunto.er = 0;
+                          errores.setIcon(imgs[rendererPunto.er]);
                 iniciar(msgsP);
 
                 break;
@@ -234,33 +221,17 @@ public class AppHangedIU1 extends javax.swing.JFrame {
                         }
                     });
                 }
-
+ rendererPunto.er = 0;
+                          errores.setIcon(imgs[rendererPunto.er]);
                 iniciar(msgsC);
 
                 break;
         }
 
     }
-//    private void dibujarPunto(int x, int y, int z) {
-//        // Recuperar los valores del Punto
-//
-//        do {
-//            x++;
-//            y++;
-//            z++;
-//            Punto punto = new Punto(x, y, z);
-//            System.out.println(x + " " + y + " " + z);
-//
-//            this.rendererPunto.cambiarFactoresTraslacion(x, y, z);
-//
-//            // Actualizar la venta de visualizacion
-//            glCanvas.repaint();
-//        } while (x < 10);
-//    }
 
     public void checarLetra(ActionEvent e, String msgs[]) {
-        /*Icon cp=new ImageIcon(getClass().getResource("/imagenes/copa.png"));//icono de la copa
-        Icon cara=new ImageIcon(getClass().getResource("/imagenes/cara.png"));//icono de la copa*/
+ 
         JButton bt = (JButton) e.getSource();
         char c[];
         //busca la letra en la palabra despues de haber sido presionada
@@ -305,8 +276,12 @@ public class AppHangedIU1 extends javax.swing.JFrame {
                      ex.initialize(args,String.valueOf(msgs[ran]));
                       ex.buildUniverse();
                       ex.showFrame();
+                      rendererPunto.er = 0;
+                          errores.setIcon(imgs[rendererPunto.er]);
                         iniciar(msgs);
-                        
+                       
+                    
+                    
                         return;
                     }
                     //SI LA LETRA NO ESTA EN EL MENSAGE, SE INCREMENTA EL ERROR Y SE CAMBIA LA IMAGEN
@@ -321,7 +296,9 @@ public class AppHangedIU1 extends javax.swing.JFrame {
                     if (rendererPunto.er == 5) {
                         JOptionPane.showMessageDialog(this, "HAS PERDIDO\n Intenta con otra palabra la respuesta es: \n" + msgs[ran], "Ahorcado", JOptionPane.INFORMATION_MESSAGE);
                         rendererPunto.er = 0;
+                          errores.setIcon(imgs[rendererPunto.er]);
                         iniciar(msgs);
+                        
                         return;
                     }
                 }
@@ -364,22 +341,23 @@ public class AppHangedIU1 extends javax.swing.JFrame {
                     //al ser correcta se muestra un mensaje y se reinicia el juego
 
                     if (gano) {
-                        JOptionPane.showMessageDialog(this, "FELICITACIONES GANASTES!!\n YA PUEDES RECLAMAR TU PREMIO", "Ahorcado", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "FELICITACIONES GANASTE!!\n YA PUEDES RECLAMAR TU PREMIO", "Ahorcado", JOptionPane.INFORMATION_MESSAGE);
                  ExText ex = new ExText();
                     String args[]={""};
                      ex.initialize(args,a(String.valueOf(msgs[ran])));
                       ex.buildUniverse();
                       ex.showFrame();
+                       rendererPunto.er = 0;
+                          errores.setIcon(imgs[rendererPunto.er]);
                         iniciar(msgs);
-                        ex.quit();
+                 
                         return;
                     }
                     //SI LA LETRA NO ESTA EN EL MENSAGE, SE INCREMENTA EL ERROR Y SE CAMBIA LA IMAGEN
                 } else {
 
-                    //err++;
-                    /*Dibujo.setIcon(imgs[++err]);*/
-                    errores.setIcon(imgs[++rendererPunto.er]);//////////////////////////////////////_----
+                  
+                    errores.setIcon(imgs[++rendererPunto.er]);
                     //SI SE LLEGA A LOS 5 ERRORES ENTONCES SE PIERDE EL JUEGO Y SE MANDA EL MENSAGE DE:
 
                     System.out.println("Error nº:" + rendererPunto.er);
@@ -387,6 +365,7 @@ public class AppHangedIU1 extends javax.swing.JFrame {
                     if (rendererPunto.er == 5) {
                         JOptionPane.showMessageDialog(this, "HAS PERDIDO\n Intenta con otra palabra la respuesta es: \n" + msgs[ran], "Ahorcado", JOptionPane.INFORMATION_MESSAGE);
                         rendererPunto.er = 0;
+                     errores.setIcon(imgs[rendererPunto.er]);
                         iniciar(msgs);
                         return;
                     }
@@ -399,11 +378,7 @@ public class AppHangedIU1 extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -411,7 +386,8 @@ public class AppHangedIU1 extends javax.swing.JFrame {
         panelJOGL = new javax.swing.JPanel();
         btnIniciar = new javax.swing.JButton();
         jComboBoxCategoria = new javax.swing.JComboBox<>();
-        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         button_1 = new javax.swing.JButton();
         button_2 = new javax.swing.JButton();
         button_3 = new javax.swing.JButton();
@@ -439,14 +415,15 @@ public class AppHangedIU1 extends javax.swing.JFrame {
         button_25 = new javax.swing.JButton();
         button_26 = new javax.swing.JButton();
         button_27 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
         txtPalabra = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
         errores = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelJOGL.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelJOGL.setPreferredSize(new java.awt.Dimension(1000, 1000));
@@ -466,444 +443,318 @@ public class AppHangedIU1 extends javax.swing.JFrame {
         panelJOGL.setLayout(panelJOGLLayout);
         panelJOGLLayout.setHorizontalGroup(
             panelJOGLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 998, Short.MAX_VALUE)
+            .addGap(0, 798, Short.MAX_VALUE)
         );
         panelJOGLLayout.setVerticalGroup(
             panelJOGLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 998, Short.MAX_VALUE)
+            .addGap(0, 688, Short.MAX_VALUE)
         );
 
+        getContentPane().add(panelJOGL, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 800, 690));
+
+        btnIniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/descarga.jpg"))); // NOI18N
         btnIniciar.setText("Iniciar");
         btnIniciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIniciarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(127, 232, -1, -1));
 
-        jComboBoxCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Animales", "Paices", "Cosas" }));
+        jComboBoxCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Animales", "Paises", "Cosas" }));
         jComboBoxCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxCategoriaActionPerformed(evt);
             }
         });
+        getContentPane().add(jComboBoxCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 40, 85, -1));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        button_1.setText("A");
-
-        button_2.setText("B");
-
-        button_3.setText("C");
-        button_3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_3ActionPerformed(evt);
-            }
-        });
-
-        button_4.setText("D");
-        button_4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_4ActionPerformed(evt);
-            }
-        });
-
-        button_5.setText("E");
-        button_5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_5ActionPerformed(evt);
-            }
-        });
-
-        button_6.setText("F");
-        button_6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_6ActionPerformed(evt);
-            }
-        });
-
-        button_7.setText("G");
-        button_7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_7ActionPerformed(evt);
-            }
-        });
-
-        button_8.setText("H");
-        button_8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_8ActionPerformed(evt);
-            }
-        });
-
-        button_9.setText("I");
-        button_9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_9ActionPerformed(evt);
-            }
-        });
-
-        button_10.setText("J");
-        button_10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_10ActionPerformed(evt);
-            }
-        });
-
-        button_11.setText("K");
-        button_11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_11ActionPerformed(evt);
-            }
-        });
-
-        button_12.setText("L");
-        button_12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_12ActionPerformed(evt);
-            }
-        });
-
-        button_13.setText("M");
-        button_13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_13ActionPerformed(evt);
-            }
-        });
-
-        button_14.setText("N");
-        button_14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_14ActionPerformed(evt);
-            }
-        });
-
-        button_15.setText("Ñ");
-        button_15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_15ActionPerformed(evt);
-            }
-        });
-
-        button_16.setText("O");
-        button_16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_16ActionPerformed(evt);
-            }
-        });
-
-        button_17.setText("P");
-        button_17.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_17ActionPerformed(evt);
-            }
-        });
-
-        button_18.setText("Q");
-        button_18.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_18ActionPerformed(evt);
-            }
-        });
-
-        button_19.setText("R");
-        button_19.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_19ActionPerformed(evt);
-            }
-        });
-
-        button_20.setText("S");
-        button_20.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_20ActionPerformed(evt);
-            }
-        });
-
-        button_21.setText("T");
-        button_21.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_21ActionPerformed(evt);
-            }
-        });
-
-        button_22.setText("U");
-        button_22.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_22ActionPerformed(evt);
-            }
-        });
-
-        button_23.setText("V");
-        button_23.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_23ActionPerformed(evt);
-            }
-        });
-
-        button_24.setText("W");
-        button_24.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_24ActionPerformed(evt);
-            }
-        });
-
-        button_25.setText("X");
-        button_25.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_25ActionPerformed(evt);
-            }
-        });
-
-        button_26.setText("Y");
-        button_26.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_26ActionPerformed(evt);
-            }
-        });
-
-        button_27.setText("Z");
-        button_27.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_27ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(button_26)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_27))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(4, 4, 4)
-                            .addComponent(button_19)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(button_20)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(button_21)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(button_22)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(button_23)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(button_24))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(button_1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(button_2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(button_3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(button_4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(button_5))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addComponent(button_7)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(button_8))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(button_13)
-                                                .addComponent(button_25))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(button_14)))
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGap(8, 8, 8)
-                                            .addComponent(button_9)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(button_10))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                            .addGap(6, 6, 6)
-                                            .addComponent(button_15)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(button_16)))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(button_17)
-                                        .addComponent(button_11))))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(button_6)
-                                .addComponent(button_12)
-                                .addComponent(button_18))
-                            .addGap(0, 0, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button_1)
-                    .addComponent(button_2)
-                    .addComponent(button_3)
-                    .addComponent(button_4)
-                    .addComponent(button_5)
-                    .addComponent(button_6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button_7)
-                    .addComponent(button_8)
-                    .addComponent(button_9)
-                    .addComponent(button_10)
-                    .addComponent(button_11)
-                    .addComponent(button_12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button_13)
-                    .addComponent(button_14)
-                    .addComponent(button_15)
-                    .addComponent(button_16)
-                    .addComponent(button_17)
-                    .addComponent(button_18))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button_19)
-                    .addComponent(button_20)
-                    .addComponent(button_21)
-                    .addComponent(button_22)
-                    .addComponent(button_23)
-                    .addComponent(button_24))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button_25)
-                    .addComponent(button_26)
-                    .addComponent(button_27))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(txtPalabra, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(49, Short.MAX_VALUE)
-                .addComponent(txtPalabra, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
-        );
-
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/descarga.jpg"))); // NOI18N
         jButton1.setText("Iniciar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 620, -1, 30));
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/23249.jpg"))); // NOI18N
         jButton2.setText("Parar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 650, -1, -1));
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        button_1.setBackground(new java.awt.Color(0, 0, 0));
+        button_1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/IMG_7127.JPG"))); // NOI18N
+        button_1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, 20));
+
+        button_2.setBackground(new java.awt.Color(0, 0, 0));
+        button_2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/b.JPG"))); // NOI18N
+        getContentPane().add(button_2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 390, -1, 20));
+
+        button_3.setBackground(new java.awt.Color(0, 0, 0));
+        button_3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/c.JPG"))); // NOI18N
+        button_3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 390, -1, 20));
+
+        button_4.setBackground(new java.awt.Color(0, 0, 0));
+        button_4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/d.JPG"))); // NOI18N
+        button_4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 390, -1, -1));
+
+        button_5.setBackground(new java.awt.Color(0, 0, 0));
+        button_5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/e.JPG"))); // NOI18N
+        button_5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, -1, -1));
+
+        button_6.setBackground(new java.awt.Color(0, 0, 0));
+        button_6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/f.JPG"))); // NOI18N
+        button_6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 390, -1, -1));
+
+        button_7.setBackground(new java.awt.Color(0, 0, 0));
+        button_7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/g.JPG"))); // NOI18N
+        button_7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_7ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, -1, -1));
+
+        button_8.setBackground(new java.awt.Color(0, 0, 0));
+        button_8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/h.JPG"))); // NOI18N
+        button_8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_8ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 430, -1, -1));
+
+        button_9.setBackground(new java.awt.Color(0, 0, 0));
+        button_9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/i.JPG"))); // NOI18N
+        button_9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_9ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_9, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 430, -1, -1));
+
+        button_10.setBackground(new java.awt.Color(0, 0, 0));
+        button_10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/j.JPG"))); // NOI18N
+        button_10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_10ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_10, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 430, -1, -1));
+
+        button_11.setBackground(new java.awt.Color(0, 0, 0));
+        button_11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/k.JPG"))); // NOI18N
+        button_11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_11ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_11, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 430, -1, -1));
+
+        button_12.setBackground(new java.awt.Color(0, 0, 0));
+        button_12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/l.JPG"))); // NOI18N
+        button_12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_12ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_12, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 430, -1, -1));
+
+        button_13.setBackground(new java.awt.Color(0, 0, 0));
+        button_13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/m.JPG"))); // NOI18N
+        button_13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_13ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 470, -1, -1));
+
+        button_14.setBackground(new java.awt.Color(0, 0, 0));
+        button_14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/n.JPG"))); // NOI18N
+        button_14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_14ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_14, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 470, -1, -1));
+
+        button_15.setBackground(new java.awt.Color(0, 0, 0));
+        button_15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/ñ.jpeg"))); // NOI18N
+        button_15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_15ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_15, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 470, -1, -1));
+
+        button_16.setBackground(new java.awt.Color(0, 0, 0));
+        button_16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/o.JPG"))); // NOI18N
+        button_16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_16ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_16, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 470, -1, -1));
+
+        button_17.setBackground(new java.awt.Color(0, 0, 0));
+        button_17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/p.JPG"))); // NOI18N
+        button_17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_17ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_17, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 470, -1, -1));
+
+        button_18.setBackground(new java.awt.Color(0, 0, 0));
+        button_18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/q.JPG"))); // NOI18N
+        button_18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_18ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_18, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 470, -1, -1));
+
+        button_19.setBackground(new java.awt.Color(0, 0, 0));
+        button_19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/r.JPG"))); // NOI18N
+        button_19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_19ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_19, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 510, -1, -1));
+
+        button_20.setBackground(new java.awt.Color(0, 0, 0));
+        button_20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/s.JPG"))); // NOI18N
+        button_20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_20ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_20, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 510, -1, -1));
+
+        button_21.setBackground(new java.awt.Color(0, 0, 0));
+        button_21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/t.JPG"))); // NOI18N
+        button_21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_21ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_21, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 510, -1, -1));
+
+        button_22.setBackground(new java.awt.Color(0, 0, 0));
+        button_22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/u.JPG"))); // NOI18N
+        button_22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_22ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_22, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 510, -1, -1));
+
+        button_23.setBackground(new java.awt.Color(0, 0, 0));
+        button_23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/v.JPG"))); // NOI18N
+        button_23.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_23ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_23, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 510, -1, -1));
+
+        button_24.setBackground(new java.awt.Color(0, 0, 0));
+        button_24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/w.JPG"))); // NOI18N
+        button_24.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_24ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_24, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 510, -1, -1));
+
+        button_25.setBackground(new java.awt.Color(0, 0, 0));
+        button_25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/x.JPG"))); // NOI18N
+        button_25.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_25ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_25, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
+
+        button_26.setBackground(new java.awt.Color(0, 0, 0));
+        button_26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/y.JPG"))); // NOI18N
+        button_26.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_26ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_26, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 550, -1, -1));
+
+        button_27.setBackground(new java.awt.Color(0, 0, 0));
+        button_27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenBotones/z.JPG"))); // NOI18N
+        button_27.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_27ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(button_27, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 550, -1, -1));
+        getContentPane().add(txtPalabra, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 210, 60));
 
         errores.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        getContentPane().add(errores, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 280, 220, 50));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
-        );
+        jLabel3.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/wood.jpg"))); // NOI18N
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 370, 200));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(92, 92, 92)
-                                .addComponent(btnIniciar))
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
-                .addComponent(panelJOGL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnIniciar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(panelJOGL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/wood.jpg"))); // NOI18N
+        jLabel4.setText("jLabel4");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 340, 110));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/wood.jpg"))); // NOI18N
+        jLabel2.setText("jLabel2");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 360, 70));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/fondo.jpg"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1220, 730));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
 
-        int x1 = 0;
-        int y1 = 0;
-        int z1 = 0;
 
-        //dibujarPunto(x1, y1, z1);
-        System.out.println("\nx1:" + x1);
+   
+
         if (JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de querer una palabra nueva?",
                 "Ahorcado", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.YES_OPTION) {
-            OpcionElejida(evt);
+            OpcionElegida(evt);
 
         } else {
             setDefaultCloseOperation(0);
@@ -1019,18 +870,6 @@ public class AppHangedIU1 extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jComboBoxCategoriaActionPerformed
 
-    private void panelJOGLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseClicked
-
-    }//GEN-LAST:event_panelJOGLMouseClicked
-
-    private void panelJOGLMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseEntered
-
-    }//GEN-LAST:event_panelJOGLMouseEntered
-
-    private void panelJOGLMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseExited
-
-    }//GEN-LAST:event_panelJOGLMouseExited
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         animador.start();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -1038,6 +877,22 @@ public class AppHangedIU1 extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         animador.stop();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void panelJOGLMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseExited
+
+    }//GEN-LAST:event_panelJOGLMouseExited
+
+    private void panelJOGLMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseEntered
+
+    }//GEN-LAST:event_panelJOGLMouseEntered
+
+    private void panelJOGLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelJOGLMouseClicked
+
+    }//GEN-LAST:event_panelJOGLMouseClicked
+
+    private void button_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button_1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1113,9 +968,10 @@ public class AppHangedIU1 extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBoxCategoria;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel panelJOGL;
     private javax.swing.JTextField txtPalabra;
     // End of variables declaration//GEN-END:variables
